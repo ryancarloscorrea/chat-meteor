@@ -75,11 +75,13 @@ if (Meteor.isServer) {
       const userId = connection._session?.userId;
       if (userId) {
         // Set user offline when connection closes
-        Meteor.users.update(userId, {
+        Meteor.users.updateAsync(userId, {
           $set: {
             'profile.status': 'offline',
             'profile.lastSeen': new Date(),
           },
+        }).catch((error) => {
+          console.error('Error updating user status on disconnect:', error);
         });
       }
     });
@@ -88,20 +90,24 @@ if (Meteor.isServer) {
   // Cleanup function to set users offline after inactivity
   const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 
-  Meteor.setInterval(() => {
+  Meteor.setInterval(async () => {
     const cutoff = new Date(Date.now() - INACTIVITY_TIMEOUT);
     
-    Meteor.users.update(
-      {
-        'profile.status': { $in: ['online', 'away'] },
-        'profile.lastSeen': { $lt: cutoff },
-      },
-      {
-        $set: {
-          'profile.status': 'offline',
+    try {
+      await Meteor.users.updateAsync(
+        {
+          'profile.status': { $in: ['online', 'away'] },
+          'profile.lastSeen': { $lt: cutoff },
         },
-      },
-      { multi: true }
-    );
+        {
+          $set: {
+            'profile.status': 'offline',
+          },
+        },
+        { multi: true }
+      );
+    } catch (error) {
+      console.error('Error updating inactive user statuses:', error);
+    }
   }, 60000); // Run every minute
 }
