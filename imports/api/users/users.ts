@@ -40,21 +40,23 @@ Accounts.config({
   loginExpiration: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
 } as any);
 
-// Set default profile fields
-Accounts.onCreateUser((options: any, user: any) => {
-  const profile: UserProfile = {
-    firstName: options.profile?.firstName || '',
-    lastName: options.profile?.lastName || '',
-    avatar: options.profile?.avatar || '',
-    status: 'online',
-    lastSeen: new Date(),
-  };
+// Set default profile fields (server-side only)
+if (Meteor.isServer) {
+  Accounts.onCreateUser((options: any, user: any) => {
+    const profile: UserProfile = {
+      firstName: options.profile?.firstName || '',
+      lastName: options.profile?.lastName || '',
+      avatar: options.profile?.avatar || '',
+      status: 'online',
+      lastSeen: new Date(),
+    };
 
-  return {
-    ...user,
-    profile,
-  };
-});
+    return {
+      ...user,
+      profile,
+    };
+  });
+}
 
 // Validation rules
 const validateEmail = (email: string): boolean => {
