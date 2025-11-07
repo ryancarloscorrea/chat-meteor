@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 
@@ -15,43 +17,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 }) => {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
 
-  if (!isOpen) return null;
-
   const handleSuccess = () => {
     onClose();
   };
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 animate-fade-in" onClick={handleBackdropClick}>
-      <div className="relative w-full max-w-md animate-slide-up">
-        <button 
-          className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-400 hover:text-gray-600 z-10"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-        
-        {mode === 'login' ? (
-          <LoginForm
-            onSuccess={handleSuccess}
-            onSwitchToRegister={() => setMode('register')}
-          />
-        ) : (
-          <RegisterForm
-            onSuccess={handleSuccess}
-            onSwitchToLogin={() => setMode('login')}
-          />
-        )}
-      </div>
-    </div>
+    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 animate-fade-in z-50" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md animate-slide-up z-50 focus:outline-none">
+          <div className="relative">
+            <Dialog.Close className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-400 hover:text-gray-600 z-10 transition-colors">
+              <Cross2Icon className="w-4 h-4" />
+            </Dialog.Close>
+            
+            {mode === 'login' ? (
+              <LoginForm
+                onSuccess={handleSuccess}
+                onSwitchToRegister={() => setMode('register')}
+              />
+            ) : (
+              <RegisterForm
+                onSuccess={handleSuccess}
+                onSwitchToLogin={() => setMode('login')}
+              />
+            )}
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };

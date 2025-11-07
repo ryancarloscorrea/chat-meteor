@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { AuthMethods, AuthError } from '/imports/api/users';
+import { Button } from '/imports/ui/components/ui/Button';
+import { Input } from '/imports/ui/components/ui/Input';
+import { Label } from '/imports/ui/components/ui/Label';
 
 interface RegisterFormProps {
   onSuccess?: () => void;
@@ -119,110 +122,111 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <Label htmlFor="firstName" className="text-gray-700">
                 First Name
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 id="firstName"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className={`form-input ${errors.firstName ? 'error' : ''}`}
+                error={!!errors.firstName}
                 disabled={isLoading}
                 autoComplete="given-name"
                 placeholder="First name"
               />
               {errors.firstName && (
-                <p className="error-message">{errors.firstName}</p>
+                <p className="text-danger-600 text-sm mt-1">{errors.firstName}</p>
               )}
             </div>
 
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <Label htmlFor="lastName" className="text-gray-700">
                 Last Name
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 id="lastName"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className={`form-input ${errors.lastName ? 'error' : ''}`}
+                error={!!errors.lastName}
                 disabled={isLoading}
                 autoComplete="family-name"
                 placeholder="Last name"
               />
               {errors.lastName && (
-                <p className="error-message">{errors.lastName}</p>
+                <p className="text-danger-600 text-sm mt-1">{errors.lastName}</p>
               )}
             </div>
           </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-gray-700">
               Email
-            </label>
-            <input
+            </Label>
+            <Input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`form-input ${errors.email ? 'error' : ''}`}
+              error={!!errors.email}
               disabled={isLoading}
               autoComplete="email"
               placeholder="Enter your email"
             />
             {errors.email && (
-              <p className="error-message">{errors.email}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-gray-700">
               Password
-            </label>
-            <input
+            </Label>
+            <Input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`form-input ${errors.password ? 'error' : ''}`}
+              error={!!errors.password}
               disabled={isLoading}
               autoComplete="new-password"
               placeholder="Create a password"
             />
             {errors.password && (
-              <p className="error-message">{errors.password}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.password}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword" className="text-gray-700">
               Confirm Password
-            </label>
-            <input
+            </Label>
+            <Input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
+              error={!!errors.confirmPassword}
               disabled={isLoading}
               autoComplete="new-password"
               placeholder="Confirm your password"
             />
             {errors.confirmPassword && (
-              <p className="error-message">{errors.confirmPassword}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.confirmPassword}</p>
             )}
           </div>
 
-          <button 
+          <Button 
             type="submit" 
-            className="btn btn-primary w-full py-3"
+            className="w-full"
+            size="lg"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -233,20 +237,21 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             ) : (
               'Create Account'
             )}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{' '}
-            <button 
-              type="button" 
-              className="btn-link"
+            <Button 
+              variant="link"
+              size="sm"
               onClick={onSwitchToLogin}
               disabled={isLoading}
+              className="p-0 h-auto font-medium"
             >
               Sign In
-            </button>
+            </Button>
           </p>
         </div>
       </div>

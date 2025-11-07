@@ -32,6 +32,7 @@ A modern chat application built with Meteor.js, React, TypeScript, and Tailwind 
 
 - **Backend**: Meteor.js with TypeScript
 - **Frontend**: React 18 with TypeScript
+- **UI Components**: Radix UI (unstyled, accessible components)
 - **Database**: MongoDB (built-in with Meteor)
 - **Styling**: Tailwind CSS
 - **Authentication**: Meteor Accounts system
@@ -58,6 +59,13 @@ chat-meteor/
 │   │       └── index.ts      # Security exports
 │   └── ui/
 │       ├── components/
+│       │   ├── ui/       # Radix UI components
+│       │   │   ├── Button.tsx
+│       │   │   ├── Input.tsx
+│       │   │   ├── Label.tsx
+│       │   │   ├── Avatar.tsx
+│       │   │   ├── DropdownMenu.tsx
+│       │   │   └── index.ts
 │       │   ├── auth/     # Authentication components
 │       │   │   ├── LoginForm.tsx
 │       │   │   ├── RegisterForm.tsx

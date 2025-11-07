@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { AuthMethods, AuthError } from '/imports/api/users';
+import { Button } from '/imports/ui/components/ui/Button';
+import { Input } from '/imports/ui/components/ui/Input';
+import { Label } from '/imports/ui/components/ui/Label';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -78,50 +81,52 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-gray-700">
               Email
-            </label>
-            <input
+            </Label>
+            <Input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`form-input ${errors.email ? 'error' : ''}`}
+              error={!!errors.email}
               disabled={isLoading}
               autoComplete="email"
               placeholder="Enter your email"
             />
             {errors.email && (
-              <p className="error-message">{errors.email}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-gray-700">
               Password
-            </label>
-            <input
+            </Label>
+            <Input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`form-input ${errors.password ? 'error' : ''}`}
+              error={!!errors.password}
               disabled={isLoading}
               autoComplete="current-password"
               placeholder="Enter your password"
             />
             {errors.password && (
-              <p className="error-message">{errors.password}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.password}</p>
             )}
           </div>
 
-          <button 
+          <Button 
             type="submit" 
-            className="btn btn-primary w-full py-3"
+            className="w-full text-black"
+            size="lg"
             disabled={isLoading}
+            variant="secondary"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
@@ -131,20 +136,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             ) : (
               'Sign In'
             )}
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm">
             Don't have an account?{' '}
-            <button 
-              type="button" 
-              className="btn-link"
+            <Button 
+              variant="link"
+              size="sm"
               onClick={onSwitchToRegister}
               disabled={isLoading}
+              className="p-0 h-auto font-medium"
             >
               Sign Up
-            </button>
+            </Button>
           </p>
         </div>
       </div>

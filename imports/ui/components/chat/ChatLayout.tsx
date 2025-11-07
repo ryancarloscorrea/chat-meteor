@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
+import { ChevronDownIcon, PaperPlaneIcon, PersonIcon } from '@radix-ui/react-icons';
 import { useAuth } from '/imports/ui/contexts/AuthContext';
 import { UserProfile } from '/imports/ui/components/auth';
+import { 
+  Avatar, 
+  AvatarImage, 
+  AvatarFallback,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  Button,
+  Input
+} from '/imports/ui/components/ui';
 
 export const ChatLayout: React.FC = () => {
   const { user } = useAuth();
@@ -14,38 +25,32 @@ export const ChatLayout: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900">Chat App</h1>
           </div>
           
-          <div className="relative">
-            <button 
-              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-              onClick={() => setShowProfile(!showProfile)}
-            >
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-primary-500 flex items-center justify-center text-white font-medium">
-                {user?.profile?.avatar ? (
-                  <img 
-                    src={user.profile.avatar} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
+          <DropdownMenu open={showProfile} onOpenChange={setShowProfile}>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className="flex items-center space-x-3 px-4 py-2 h-auto"
+              >
+                <Avatar className="w-8 h-8">
+                  <AvatarImage 
+                    src={user?.profile?.avatar} 
+                    alt="Profile"
                   />
-                ) : (
-                  <span className="text-sm">
+                  <AvatarFallback>
                     {user?.profile?.firstName?.[0]}{user?.profile?.lastName?.[0]}
-                  </span>
-                )}
-              </div>
-              <span className="text-sm font-medium text-gray-700">
-                {user?.profile?.firstName} {user?.profile?.lastName}
-              </span>
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium text-gray-700">
+                  {user?.profile?.firstName} {user?.profile?.lastName}
+                </span>
+                <ChevronDownIcon className="w-4 h-4 text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
             
-            {showProfile && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                <UserProfile onClose={() => setShowProfile(false)} />
-              </div>
-            )}
-          </div>
+            <DropdownMenuContent className="w-80" align="end">
+              <UserProfile onClose={() => setShowProfile(false)} />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
@@ -56,9 +61,7 @@ export const ChatLayout: React.FC = () => {
           </div>
           <div className="flex-1 p-4">
             <div className="text-center text-gray-500 mt-8">
-              <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+              <PersonIcon className="w-12 h-12 mx-auto mb-4 text-gray-300" />
               <p className="text-sm">Chat functionality coming soon...</p>
             </div>
           </div>
@@ -89,20 +92,18 @@ export const ChatLayout: React.FC = () => {
 
           <div className="border-t border-gray-200 p-4 bg-white">
             <div className="flex items-center space-x-4">
-              <input 
+              <Input 
                 type="text" 
                 placeholder="Type a message..." 
                 disabled
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="flex-1"
               />
-              <button 
-                className="btn btn-primary px-6 py-2" 
+              <Button 
+                size="icon"
                 disabled
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </button>
+                <PaperPlaneIcon className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useAuth } from '/imports/ui/contexts/AuthContext';
 import { AuthModal } from '/imports/ui/components/auth';
+import { Button } from '/imports/ui/components/ui';
 
 interface PrivateRouteProps {
   children: ReactNode;
@@ -36,12 +37,13 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Chat App</h2>
             <p className="text-gray-600 mb-6">Please sign in to access the chat application.</p>
-            <button 
-              className="btn btn-primary px-8 py-3"
+            <Button 
+              size="lg"
+              variant="secondary"
               onClick={() => setShowAuthModal(true)}
             >
               Sign In
-            </button>
+            </Button>
           </div>
         </div>
         

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
+import { Pencil1Icon, LockClosedIcon, ExitIcon } from '@radix-ui/react-icons';
 import { useAuth } from '/imports/ui/contexts/AuthContext';
 import { AuthMethods, AuthError } from '/imports/api/users';
+import { 
+  Button,
+  Input,
+  Label,
+  Avatar,
+  AvatarImage,
+  AvatarFallback
+} from '/imports/ui/components/ui';
 
 interface UserProfileProps {
   onClose?: () => void;
@@ -148,15 +157,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
   return (
     <div className="p-6">
       <div className="flex items-center space-x-4 mb-6 pb-6 border-b border-gray-200">
-        <div className="w-16 h-16 rounded-full overflow-hidden bg-primary-500 flex items-center justify-center text-white font-medium">
-          {user.profile?.avatar ? (
-            <img src={user.profile.avatar} alt="Profile" className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-lg">
-              {user.profile?.firstName?.[0]}{user.profile?.lastName?.[0]}
-            </span>
-          )}
-        </div>
+        <Avatar className="w-16 h-16">
+          <AvatarImage 
+            src={user.profile?.avatar} 
+            alt="Profile"
+          />
+          <AvatarFallback className="text-lg">
+            {user.profile?.firstName?.[0]}{user.profile?.lastName?.[0]}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-gray-900">{user.profile?.firstName} {user.profile?.lastName}</h3>
           <p className="text-sm text-gray-600">{user.emails?.[0]?.address}</p>
@@ -189,55 +198,54 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
         <form onSubmit={handleProfileSubmit} className="space-y-4">
           <h4 className="text-lg font-medium text-gray-900 mb-4">Edit Profile</h4>
           
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="text-gray-700">First Name</Label>
+            <Input
               type="text"
               id="firstName"
               name="firstName"
               value={profileData.firstName}
               onChange={handleProfileChange}
-              className={`form-input ${errors.firstName ? 'error' : ''}`}
+              error={!!errors.firstName}
               disabled={isLoading}
             />
             {errors.firstName && (
-              <p className="error-message">{errors.firstName}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.firstName}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="text-gray-700">Last Name</Label>
+            <Input
               type="text"
               id="lastName"
               name="lastName"
               value={profileData.lastName}
               onChange={handleProfileChange}
-              className={`form-input ${errors.lastName ? 'error' : ''}`}
+              error={!!errors.lastName}
               disabled={isLoading}
             />
             {errors.lastName && (
-              <p className="error-message">{errors.lastName}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.lastName}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="avatar" className="block text-sm font-medium text-gray-700 mb-2">Avatar URL (optional)</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="avatar" className="text-gray-700">Avatar URL (optional)</Label>
+            <Input
               type="url"
               id="avatar"
               name="avatar"
               value={profileData.avatar}
               onChange={handleProfileChange}
-              className="form-input"
               disabled={isLoading}
             />
           </div>
 
           <div className="flex space-x-3 pt-4">
-            <button 
+            <Button 
               type="submit" 
-              className="btn btn-primary flex-1"
+              className="flex-1"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -248,73 +256,74 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               ) : (
                 'Save Changes'
               )}
-            </button>
-            <button 
+            </Button>
+            <Button 
               type="button" 
-              className="btn btn-secondary flex-1"
+              variant="outline"
+              className="flex-1"
               onClick={() => setIsEditing(false)}
               disabled={isLoading}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       ) : isChangingPassword ? (
         <form onSubmit={handlePasswordSubmit} className="space-y-4">
           <h4 className="text-lg font-medium text-gray-900 mb-4">Change Password</h4>
           
-          <div>
-            <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="oldPassword" className="text-gray-700">Current Password</Label>
+            <Input
               type="password"
               id="oldPassword"
               name="oldPassword"
               value={passwordData.oldPassword}
               onChange={handlePasswordChange}
-              className={`form-input ${errors.oldPassword ? 'error' : ''}`}
+              error={!!errors.oldPassword}
               disabled={isLoading}
             />
             {errors.oldPassword && (
-              <p className="error-message">{errors.oldPassword}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.oldPassword}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="newPassword" className="text-gray-700">New Password</Label>
+            <Input
               type="password"
               id="newPassword"
               name="newPassword"
               value={passwordData.newPassword}
               onChange={handlePasswordChange}
-              className={`form-input ${errors.newPassword ? 'error' : ''}`}
+              error={!!errors.newPassword}
               disabled={isLoading}
             />
             {errors.newPassword && (
-              <p className="error-message">{errors.newPassword}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.newPassword}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword" className="text-gray-700">Confirm New Password</Label>
+            <Input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={passwordData.confirmPassword}
               onChange={handlePasswordChange}
-              className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
+              error={!!errors.confirmPassword}
               disabled={isLoading}
             />
             {errors.confirmPassword && (
-              <p className="error-message">{errors.confirmPassword}</p>
+              <p className="text-danger-600 text-sm mt-1">{errors.confirmPassword}</p>
             )}
           </div>
 
           <div className="flex space-x-3 pt-4">
-            <button 
+            <Button 
               type="submit" 
-              className="btn btn-primary flex-1"
+              className="flex-1"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -325,41 +334,41 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               ) : (
                 'Change Password'
               )}
-            </button>
-            <button 
+            </Button>
+            <Button 
               type="button" 
-              className="btn btn-secondary flex-1"
+              variant="outline"
+              className="flex-1"
               onClick={() => setIsChangingPassword(false)}
               disabled={isLoading}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       ) : (
         <div className="space-y-3">
-          <button 
-            className="btn btn-secondary w-full justify-center"
+          <Button 
+            variant="outline"
+            className="w-full justify-center"
             onClick={() => setIsEditing(true)}
             disabled={isLoading}
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
+            <Pencil1Icon className="w-4 h-4 mr-2" />
             Edit Profile
-          </button>
-          <button 
-            className="btn btn-secondary w-full justify-center"
+          </Button>
+          <Button 
+            variant="outline"
+            className="w-full justify-center"
             onClick={() => setIsChangingPassword(true)}
             disabled={isLoading}
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v-2L4.257 10.257a6 6 0 0110.486-10.486L15 7z" />
-            </svg>
+            <LockClosedIcon className="w-4 h-4 mr-2" />
             Change Password
-          </button>
-          <button 
-            className="btn btn-danger w-full justify-center"
+          </Button>
+          <Button 
+            variant="destructive"
+            className="w-full justify-center"
             onClick={handleLogout}
             disabled={isLoading}
           >
@@ -370,13 +379,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ onClose }) => {
               </div>
             ) : (
               <>
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
+                <ExitIcon className="w-4 h-4 mr-2" />
                 Sign Out
               </>
             )}
-          </button>
+          </Button>
         </div>
       )}
     </div>
